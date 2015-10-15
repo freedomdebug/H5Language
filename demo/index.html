@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title data-lang="title" data-lang-subtitle="title"></title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes" /> <meta name="apple-mobile-web-app-status-bar-style" content="black" /> <meta name="format-detection" content="telephone=no" /> <meta name="format-detection" content="email=no" /> <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+
+
+
+    <style>
+        .body-lang-zh-Hans .lang-default{  visibility: visible; }
+        .lang-default{ visibility: hidden; }
+    </style>
+</head>
+<body data-lang-config="{
+        packType : 'file',   //语言包存在方式 : [ file | inline ]
+        baseUrl : '../i18n/',  // 语言包相对路径，如果 packType === inline ，不需要配置此项
+        defaultLang : 'zh-Hans' //默认，兜底
+}">
+
+配置参数：
+<pre>
+ &lt;body data-lang-config="{
+        packType : 'inline',   //语言包存在方式 : [ file | inline ]
+        baseUrl : './i18n/',  // 语言包相对路径，如果 packType === inline ，不需要配置此项
+        defaultLang : 'zh-Hans' //默认，兜底
+}"&gt;
+</pre>
+
+
+<hr>
+
+
+
+
+<a data-lang-title="title">我是 lang title </a> <br>
+<hr>
+
+<input type="checkbox" data-lang="error" />
+
+<hr>
+<div data-lang="^_^"><span class="lang-default">呵呵</span></div>
+
+<hr>
+<span data-lang="我"><span class="lang-default">我的图标</span></span>
+
+<hr>
+
+<span data-lang="error"><span class="lang-default">系统错误啊</span></span>
+
+<hr>
+<input data-lang="error" />
+<input data-lang-placeholder="placeholder" />
+<br><br>
+<hr>
+<textarea data-lang="error"></textarea> <br>
+sdfsdf
+
+
+<br><br>
+<hr>
+<img data-lang="广告图片" data-lang-alt="title" >
+
+
+
+<br><br>
+<hr>
+
+&lt;script&gt; 也支持 data-lang (自动替换成 src )
+<script data-lang="ad-js" charset="utf-8"></script>
+
+
+<hr>
+
+<script type="text/html" id="tpl1">
+    <article>
+        <h2>@lang (我)  ))))), @lang(    我     )</h2>
+        <p><img data-src="@lang( 广告图片 )" /></p>
+    </article>
+</script>
+
+
+对于 &lt;script 属性  type="text/html" 的标签进行替换，在页面初始化的时候就被替换。
+<br>
+<textarea style=" width: 500px; height: 120px; resize: none" readonly>
+<script type="text/html">
+    <article>
+        <h2>@lang (我)))))), @lang(    我     )</h2>
+        <p><img data-src="@lang( 广告图片 )" /></p>
+    </article>
+</script>
+</textarea>
+
+
+
+<br>
+被替换成:
+<br>
+<textarea style=" width: 500px; height: 120px; resize: none" readonly>
+<script type="text/html">
+    <article>
+        <h2>周星驰)))))，周星驰</h2>
+        <p><img data-src="https://i.alipayobjects.com/i/ecmng/png/201411/3qC7hSbxuv.png" /></p>
+    </article>
+</script>
+</textarea>
+
+<!-- ddd -->
+<script>
+    //可以  强行 设置 语言
+  //  var H5LangType = 'zh-Hans';
+
+
+    // demo ，下面都可以删除
+
+//    var _H5Lang_ = []; //
+//
+//    _H5Lang_['en'] = {
+//        "我" : "my ffffffff",
+//        "title" : 'title',
+//        "我的余额" : "my {%s} ，ol {%s} ",
+//        "^_^" : "hthththt sdjknfksdj sdf jisjdfsjd fsdfsd ",
+//        "error" : "sdfs fsdf sdf sdf sdf sdf dsf",
+//        "广告图片": "https://i.alipayobjects.com/i/ecmng/png/201411/3qC7hSbxuv.png",
+//        "placeholder" : 'this is placeholder',
+//        "ad-js" : 'https://t.alipayobjects.com/images/rmsweb/T19ctgXcRlXXXXXXXX.js'
+//
+//    };
+
+
+
+</script>
+
+<script src="../js/lang.js" charset="utf-8"></script>
+<!--<script src="dist/1.0.0.js" charset="utf-8"></script>-->
+
+
+<script>
+
+
+    // demo ，下面都可以删除
+    H5LangReady(function(){
+
+        //改变翻译
+        H5Lang.set('aaa', 'aaa');
+
+        //获取 翻译
+        console.log( H5Lang.get('^_^') );
+
+        console.log( H5Lang.get('我的余额', 100, 20 ) );
+
+        //对象替换  语言包为： 我的余额是{%a},冻结资金{%b}
+        console.log( H5Lang.get('我的余额2', {
+            'money' : 100,
+            '冻结资金' : 20
+
+        }));
+
+
+
+        //获取语言版本
+        console.log( H5Lang.type );
+
+        //根据业务需求 ， 在这里加载 不同语言下 的 js
+        H5Lang.loadJs( 'https://t.alipayobjects.com/images/rmsweb/T19ctgXcRlXXXXXXXX.js?lang='+ H5Lang.type , {
+            onLoad      : function(){  // 加载成功 回调
+
+            }
+            , onError   : function(){
+
+            }
+            , charset   : 'utf-8' // 编码
+            , timeout   : 1e4 // 超时时间
+        });
+
+        //加载不同 css ，请 用 zepto、jQuery 自行加载
+
+    });
+
+
+
+    H5LangReady(function(){
+       console.log('H5LangReady 2');
+    });
+
+
+    H5LangReady(function(){
+        console.log('H5LangReady 3');
+    });
+
+</script>
+
+
+
+
+</body>
+</html>
