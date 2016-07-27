@@ -6,9 +6,8 @@
 	2、在线 H5页面（不方便服务器端做翻译）
 
 ### 项目人员：
-	开发：@[王员外](https://yuanwai.wang)
-	
- 
+开发: [王员外](https://yuanwai.wang)
+
 ### Update
 	 1.0.0
 	      ~ H5LangReady之前表示lang 语言包加载完毕，现在表示 翻译完毕

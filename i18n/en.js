@@ -13,5 +13,4 @@ _H5Lang_['en'] = {
 	"广告图片": "https://i.alipayobjects.com/i/ecmng/png/201411/3qC7hSbxuv.png",
 	"placeholder" : 'this is placeholder',
 	"ad-js" : 'https://t.alipayobjects.com/images/rmsweb/T19ctgXcRlXXXXXXXX.js'
-
 };
