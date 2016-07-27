@@ -10,59 +10,59 @@
 	'use strict';
 
 	var lang = {
-				//注册事件
-				readyFn : [], //存放 fn 队列
-				isLoaded : false, //语言包是否已经加载 ok
-				version : '1.0.1',
-				opt : {}, //合并后的 option
-				pack : {}, //存放当前语言包
-				options : {
-					packType : 'file',   //语言包存在方式 : [ file | inline ]
-					baseUrl : './i18n/',  // 语言包相对路径，如果 packType === inline ，不需要配置此项
-					defaultLang : 'zh-Hans' //默认，兜底
-				},
+			//注册事件
+			readyFn : [], //存放 fn 队列
+			isLoaded : false, //语言包是否已经加载 ok
+			version : '0.0.5',
+			opt : {}, //合并后的 option
+			pack : {}, //存放当前语言包
+			options : {
+				packType : 'file',   //语言包存在方式 : [ file | inline ]
+				baseUrl : './i18n/',  // 语言包相对路径，如果 packType === inline ，不需要配置此项
+				defaultLang : 'zh-Hans' //默认，兜底
+			},
 
-				//# 空函数
-				noop : function() {
-					return function(){};
-				},
+			//# 空函数
+			noop : function() {
+				return function(){};
+			},
 
-				//# 对象扩展
-				extend : function(){
-					var target = arguments[0] || {} , i = 1 , length = arguments.length , options ;
-					if ( typeof target !== "object" && typeof target !== "function" ){
-						target = {};
-					}
-					for ( ; i < length; i++ ){
-						if ( (options = arguments[ i ]) != null ){
-							for ( var name in options ) {
-								var copy = options[ name ];
-								if ( target === copy ){
-									continue;
-								}
-								if ( copy !== undefined ){
-									target[ name ] = copy;
-								}
+			//# 对象扩展
+			extend : function(){
+				var target = arguments[0] || {} , i = 1 , length = arguments.length , options ;
+				if ( typeof target !== "object" && typeof target !== "function" ){
+					target = {};
+				}
+				for ( ; i < length; i++ ){
+					if ( (options = arguments[ i ]) != null ){
+						for ( var name in options ) {
+							var copy = options[ name ];
+							if ( target === copy ){
+								continue;
+							}
+							if ( copy !== undefined ){
+								target[ name ] = copy;
 							}
 						}
 					}
-					return target;
-				},
-				getType : function(){
-					//如果 定义了  window.H5LangType ，优先使用 window.H5LangType
-					var langs = window.navigator.userAgent.match( /Language\/([\w\-]+)/i) || [] ;
-					return window.H5LangType || langs[1] || this.opt.defaultLang || 'zh-Hans';
-				},
-				type : 'zh-Hans'
+				}
+				return target;
+			},
+			getType : function(){
+				//如果 定义了  window.H5LangType ，优先使用 window.H5LangType
+				var langs = window.navigator.userAgent.match( /Language\/([\w\-]+)/i) || [] ;
+				return window.H5LangType || langs[1] || this.opt.defaultLang || 'zh-Hans';
+			},
+			type : 'zh-Hans'
 
-			}
-			;
+		}
+		;
 
 
 
 	lang.init = function(){
 		var self = this,
-				config = document.body.getAttribute('data-lang-config') || {};
+			config = document.body.getAttribute('data-lang-config') || {};
 
 		self.type = self.getType();
 
@@ -131,17 +131,17 @@
 	 * */
 	lang.loadJs = function( src, opt ){
 		var self = this,
-				head = document.getElementsByTagName('head')[0] || document.documentElement,
-				script = document.createElement('script'),
-				opts    = {
-					onLoad      : self.noop // 加载成功 回调
-					, onError   : self.noop //onerror
-					, charset   : 'utf-8' // 编码
-					, timeout   : 1e4 // 超时时间
-				}
-				, timer = null //超时
+			head = document.getElementsByTagName('head')[0] || document.documentElement,
+			script = document.createElement('script'),
+			opts    = {
+				onLoad      : self.noop // 加载成功 回调
+				, onError   : self.noop //onerror
+				, charset   : 'utf-8' // 编码
+				, timeout   : 1e4 // 超时时间
+			}
+			, timer = null //超时
 
-				;
+			;
 		//不允许地址为空
 		if( ! src ){
 			return ;
@@ -189,13 +189,13 @@
 
 		//所有节点
 		var self = this,
-				boxes = document.querySelectorAll('*'),
-				item = null,  //遍历的临时变量
-				itemLangKey = '',
-				itemLang = '',
-				itemPlaceholder = '',
-				tagName = ''
-				;
+			boxes = document.querySelectorAll('*'),
+			item = null,  //遍历的临时变量
+			itemLangKey = '',
+			itemLang = '',
+			itemPlaceholder = '',
+			tagName = ''
+			;
 
 		for( var i in boxes ){
 			item = boxes[i];
@@ -289,12 +289,40 @@
 		}
 
 
+		//修改标题
+		_win.AlipayJSBridge ? self.setTitle() : document.addEventListener('AlipayJSBridgeReady', function () {
+			self.setTitle();
+		});
+
 		return boxes;
 
 	};
 
 
 
+	/*
+	 * 修改标题
+	 * */
+	lang.setTitle  = function( title, subtitle ){
+
+		//容器 对于后期修改标题不起作用，的用容器接口
+		var self = this,
+			titles = {},
+			titleDom = document.querySelector('title');
+
+		//优先使用 传递变量，其次用 <title> 属性
+		title = title || self.get( titleDom.getAttribute('data-lang') );
+
+		subtitle = subtitle || self.get( titleDom.getAttribute('data-lang-subtitle') );
+
+		titles = {
+			title : title,
+			subtitle : subtitle
+		};
+
+		AlipayJSBridge.call("setTitle", titles );
+
+	};
 
 
 	/*
@@ -302,11 +330,11 @@
 	 * */
 	lang.get  = function(){
 		var self = this,
-				arg = arguments,
-				lang = '',
-				key = arg[0],
-				len = arg.length
-				;
+			arg = arguments,
+			lang = '',
+			key = arg[0],
+			len = arg.length
+			;
 
 
 		if( len === 0 ){
@@ -377,14 +405,11 @@
 	//##### 私有
 	/*字符串转对象*/
 	function parseObj(data) {
-		data = ( data || '').replace(/^\s+|\s+$/g, '');
+		data = ( data || '' ).replace(/^\s+|\s+$/, '');
 		try {
 			return (new Function("return " + data))();
 		} catch (e) {
 			return {};
 		}
 	}
-
-
-
 })(document, window);
